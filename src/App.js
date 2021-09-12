@@ -1,6 +1,7 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Component } from "react";
+import { CardList } from "./components/card-list/CardList";
+import { SearchBox } from "./components/searchbox/SearchBox";
 
 class App extends Component {
   constructor() {
@@ -8,6 +9,7 @@ class App extends Component {
 
     this.state = {
       monsters: [],
+      searchField: "",
     };
   }
 
@@ -18,23 +20,20 @@ class App extends Component {
   }
 
   render() {
-    const handleChange = () => {
-      return this.setState({ name: "John" });
+    const { monsters, searchField } = this.state;
+    const filteredMonsters = monsters.filter((monster) =>
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
+    );
+
+    const handleChange = (e) => {
+      this.setState({ searchField: e.target.value });
     };
 
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          {this.state.monsters.map((monster) => {
-            return (
-              <p key={monster.id}>
-                {monster.name} {monster.username}
-              </p>
-            );
-          })}
-          <button onClick={handleChange}>Change text</button>
-        </header>
+        <h1>Monsters</h1>
+        <SearchBox placeholder="search monsters" handleChange={handleChange} />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
